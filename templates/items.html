@@ -56,16 +56,15 @@
 
 <main class="container">
   <div class="row">
-   {% for category in categories %}
+   {% for item in items %}
     <div class="col-sm-4">
-      <div class="panel panel-primary">
-        <div class="panel-heading">{{category.name}}</div>
-        <div class="panel-body">
-         <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmnmcx8RpWd4rEO_s9Nq46UMpO4YP4tqFAKErLIsmdqCDBGKsIaQ" class="img-responsive" style="width:100%" alt="Image">
-        </div>
+      <div class="panel panel-info">
+        <div class="panel-heading">{{item.name}}</div>
+        <div class="panel-body">{{item.description}}</div>
         <div class="panel-footer">
          <p>
-           <a href="{{url_for('showItems', category_id = category.id) }}" class="btn btn-primary">View items</a>
+           <a href="#" class="btn btn-info">{{item.price}}</a>
+           <a href="#" class="btn btn-success">Add to cart</a>
          </p>
         </div>
       </div>
