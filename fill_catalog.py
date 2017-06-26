@@ -186,18 +186,18 @@ category6 = Category(name="Biking")
 session.add(category6)
 session.commit()
 
-item1 = Item(name="Bat", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category6)
+item1 = Item(name="Mountain Bike", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$500.00", size="Medium", category=category6)
 session.add(item1)
 session.commit()
 
-item1 = Item(name="Bowl", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category6)
+item1 = Item(name="Road Bike", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$800.00", size="Large", category=category6)
 session.add(item1)
 session.commit()
 
-item1 = Item(name="Gloves", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category6)
+item1 = Item(name="Commute Bike", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$450.00", size="Large", category=category6)
 session.add(item1)
 session.commit()
 
@@ -206,8 +206,8 @@ item1 = Item(name="Helmet", description="A cricket bat is a specialised piece of
 session.add(item1)
 session.commit()
 
-item1 = Item(name="Leg pads", description="Leg pads serve to protect the legs from impact by a hard ball or puck at high speed which could otherwise cause injuries to the lower leg.",
-                     price="$7.50", size="Large", category=category6)
+item1 = Item(name="Comfy seat", description="Leg pads serve to protect the legs from impact by a hard ball or puck at high speed which could otherwise cause injuries to the lower leg.",
+                     price="$8.50", size="Large", category=category6)
 session.add(item1)
 session.commit()
 
@@ -264,32 +264,27 @@ category8 = Category(name="Skiing")
 session.add(category8)
 session.commit()
 
-item1 = Item(name="Bat", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category8)
-session.add(item1)
-session.commit()
-
-item1 = Item(name="Bowl", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category8)
-session.add(item1)
-session.commit()
-
-item1 = Item(name="Gloves", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category8)
-session.add(item1)
-session.commit()
-
-item1 = Item(name="Helmet", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
-                     price="$7.50", size="Large", category=category8)
-session.add(item1)
-session.commit()
-
-item1 = Item(name="Leg pads", description="Leg pads serve to protect the legs from impact by a hard ball or puck at high speed which could otherwise cause injuries to the lower leg.",
-                     price="$7.50", size="Large", category=category8)
-session.add(item1)
-session.commit()
-
 item1 = Item(name="Wicket-keeper's gloves", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$7.50", size="Large", category=category8)
+session.add(item1)
+session.commit()
+
+item1 = Item(name="Snow Jacket", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$7.50", size="Large", category=category8)
+session.add(item1)
+session.commit()
+
+item1 = Item(name="Jumper", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$7.50", size="Large", category=category8)
+session.add(item1)
+session.commit()
+
+item1 = Item(name="Ski Gloves", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
+                     price="$7.50", size="Large", category=category8)
+session.add(item1)
+session.commit()
+
+item1 = Item(name="Ski Poles", description="A cricket bat is a specialised piece of equipment used by batsmen in the sport of cricket to hit the ball, typically consisting of a cane handle attached to a flat-fronted willow-wood blade",
                      price="$7.50", size="Large", category=category8)
 session.add(item1)
 session.commit()
