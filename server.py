@@ -133,10 +133,6 @@ def gconnect():
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session['access_token']
-    # print 'In gdisconnect access token is %s', access_token
-    # print 'User name is: '
-    # print login_session['username']
-    # del login_session['username']
     if access_token is None:
         response = make_response(json.dumps('Current user not connected.'), 401)
     	response.headers['Content-Type'] = 'application/json'
@@ -147,11 +143,6 @@ def gdisconnect():
     print 'result is '
     print result
     if result['status'] == '200':
-        # del login_session['access_token']
-        # del login_session['gplus_id']
-    	# del login_session['username']
-    	# del login_session['email']
-    	# del login_session['picture']
         login_session.clear()
         # Re-direct to /catalog when disconnect
         return redirect('/catalog')
@@ -180,6 +171,7 @@ def showItems(category_id):
     else:
         return render_template('items_signout.html', items=items, category=category, login_session=login_session)
 
+# CRUD operations for Category
 @app.route('/catalog/add_category/', methods=['GET', 'POST'])
 def addCategory():
     if 'username' not in login_session:
@@ -194,18 +186,6 @@ def addCategory():
     else:
         return render_template('categoryToAdd.html', login_session=login_session)
 
-@app.route('/catalog/<int:category_id>/delete/', methods=['GET', 'POST'])
-def deleteCategory(category_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    categoryToDelete = session.query(Category).filter_by(id=category_id).one()
-    if request.method == 'POST':
-        session.delete(categoryToDelete)
-        session.commit()
-        return redirect('/')
-    else:
-        return render_template('categoryToDelete.html', category=categoryToDelete, login_session=login_session)
-
 @app.route('/catalog/<int:category_id>/edit/', methods=['GET', 'POST'])
 def editCategory(category_id):
     if 'username' not in login_session:
@@ -219,6 +199,19 @@ def editCategory(category_id):
     else:
         return render_template('categoryToEdit.html', category=categoryToEdit, login_session=login_session)
 
+@app.route('/catalog/<int:category_id>/delete/', methods=['GET', 'POST'])
+def deleteCategory(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    categoryToDelete = session.query(Category).filter_by(id=category_id).one()
+    if request.method == 'POST':
+        session.delete(categoryToDelete)
+        session.commit()
+        return redirect('/')
+    else:
+        return render_template('categoryToDelete.html', category=categoryToDelete, login_session=login_session)
+
+# CRUD operations for items
 @app.route('/catalog/<int:category_id>/item/add/', methods=['GET', 'POST'])
 def addItem(category_id):
     if 'username' not in login_session:
