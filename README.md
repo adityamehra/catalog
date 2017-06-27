@@ -11,8 +11,8 @@ This a project for Udacity's Full Stack Web Developer Nanodegree and tutorial is
 - Install the prerequisites
 - Move the repository to the directry called __vagrant__, see [Download the VM configuration](#download-the-vm-configuration) section
 - Run the following command:
- 1. `python database_setup`, to create sqlite database catalog with Category and Item tables
- 2. `python fill_catalog.py`, to fill the tables with some values
+ 1. `python database_setup`, to create sqlite database __catalog__ with __Category__ and __Item__ tables
+ 2. `python fill_catalog.py`, to fill the tables with values
  3. `python server.py`, to get the website up and running
 - Go to http://localhost:8000/
 
