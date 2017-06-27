@@ -17,25 +17,27 @@ import json
 from flask import make_response, flash
 import requests
 
+# HTML sanitizing library that escapes or strips markup and attributess
+import bleach
+
 
 app = Flask('__name__')
 
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = "Catalog"
 
 engine = create_engine('sqlite:///catalog.db')
 # Bind the engine to the metadata of the Base class so that the
 # declaratives can be accessed through a DBSession instance
 Base.metadata.bind = engine
-
 DBSession = sessionmaker(bind=engine)
-
 session = DBSession()
 
+# function to get all the categories
 def getCategories():
     return session.query(Category).all()
 
+# route for login
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -65,17 +67,13 @@ def gconnect():
         response.headers['Content-Type'] = 'application/json'
         return response
 
-    # print credentials.to_json()
-    # print credentials
     # Check that the access token is valid.
     access_token = credentials.access_token
-    # print access_token
     url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
            % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
-    # print result
-    # print result.get('error')
+
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
         # print "if result.get('error') is not None:"
@@ -85,7 +83,6 @@ def gconnect():
 
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
-    # print gplus_id
     if result['user_id'] != gplus_id:
         # print "if result['user_id'] != gplus_id:"
         response = make_response(
@@ -95,7 +92,6 @@ def gconnect():
 
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
-        # print "if result['issued_to'] != CLIENT_ID:"
         response = make_response(
             json.dumps("Token's client ID does not match app's."), 401)
         print "Token's client ID does not match app's."
@@ -105,7 +101,6 @@ def gconnect():
     stored_credentials = login_session.get('access_token')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_credentials is not None and gplus_id == stored_gplus_id:
-        # print "if stored_credentials is not None and gplus_id == stored_gplus_id:"
         response = make_response(json.dumps('Current user is already connected.'),
                                  200)
         response.headers['Content-Type'] = 'application/json'
@@ -138,12 +133,12 @@ def gconnect():
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session['access_token']
-    print 'In gdisconnect access token is %s', access_token
-    print 'User name is: '
-    print login_session['username']
+    # print 'In gdisconnect access token is %s', access_token
+    # print 'User name is: '
+    # print login_session['username']
+    # del login_session['username']
     if access_token is None:
- 	print 'Access Token is None'
-    	response = make_response(json.dumps('Current user not connected.'), 401)
+        response = make_response(json.dumps('Current user not connected.'), 401)
     	response.headers['Content-Type'] = 'application/json'
     	return response
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
@@ -152,12 +147,12 @@ def gdisconnect():
     print 'result is '
     print result
     if result['status'] == '200':
-        del login_session['access_token']
-        del login_session['gplus_id']
-        name = login_session['username']
-    	del login_session['username']
-    	del login_session['email']
-    	del login_session['picture']
+        # del login_session['access_token']
+        # del login_session['gplus_id']
+    	# del login_session['username']
+    	# del login_session['email']
+    	# del login_session['picture']
+        login_session.clear()
         # Re-direct to /catalog when disconnect
         return redirect('/catalog')
     else:
@@ -185,7 +180,104 @@ def showItems(category_id):
     else:
         return render_template('items_signout.html', items=items, category=category, login_session=login_session)
 
+@app.route('/catalog/add_category/', methods=['GET', 'POST'])
+def addCategory():
+    if 'username' not in login_session:
+        return redirect('/login')
+    if request.method == 'POST':
+        if request.form['name']:
+            category = Category(name=bleach.clean(request.form['name']))
+            session.add(category)
+            session.commit()
+        # flash('New Menu %s Item Successfully Created' % (newItem.name))
+        return redirect('/catalog')
+    else:
+        return render_template('categoryToAdd.html', login_session=login_session)
 
+@app.route('/catalog/<int:category_id>/delete/', methods=['GET', 'POST'])
+def deleteCategory(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    categoryToDelete = session.query(Category).filter_by(id=category_id).one()
+    if request.method == 'POST':
+        session.delete(categoryToDelete)
+        session.commit()
+        return redirect('/')
+    else:
+        return render_template('categoryToDelete.html', category=categoryToDelete, login_session=login_session)
+
+@app.route('/catalog/<int:category_id>/edit/', methods=['GET', 'POST'])
+def editCategory(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    categoryToEdit = session.query(Category).filter_by(id=category_id).one()
+    if request.method == 'POST':
+        categoryToEdit.name = bleach.clean(request.form['name'])
+        session.add(categoryToEdit)
+        session.commit()
+        return redirect('/')
+    else:
+        return render_template('categoryToEdit.html', category=categoryToEdit, login_session=login_session)
+
+@app.route('/catalog/<int:category_id>/item/add/', methods=['GET', 'POST'])
+def addItem(category_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    category = session.query(Category).filter_by(id=category_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            newItem = Item(name=bleach.clean(request.form['name']), description=bleach.clean(request.form['description']),
+                           price='$' + bleach.clean(request.form['price']), size=bleach.clean(request.form['size']), category=category)
+            session.add(newItem)
+            session.commit()
+        # flash('New Menu %s Item Successfully Created' % (newItem.name))
+        return redirect('/catalog/%s/items/' % category.id)
+    else:
+        return render_template('itemToAdd.html', category=category, login_session=login_session)
+
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/edit/', methods=['GET', 'POST'])
+def editItem(category_id, item_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    category = session.query(Category).filter_by(id=category_id).one()
+    itemToEdit = session.query(Item).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            itemToEdit.name = bleach.clean(request.form['name'])
+        if request.form['description']:
+            itemToEdit.description = bleach.clean(request.form['description'])
+        if request.form['price']:
+            itemToEdit.price = bleach.clean(request.form['price'])
+        if request.form['size']:
+            itemToEdit.size = bleach.clean(request.form['size'])
+        session.add(itemToEdit)
+        session.commit()
+        return redirect('/catalog/%s/items/' % category.id)
+    else:
+        return render_template('itemToEdit.html', item=itemToEdit, category=category, login_session=login_session)
+
+@app.route('/catalog/<int:category_id>/item/<int:item_id>/delete/', methods=['GET', 'POST'])
+def deleteItem(category_id, item_id):
+    if 'username' not in login_session:
+        return redirect('/login')
+    category = session.query(Category).filter_by(id=category_id).one()
+    itemToDelete = session.query(Item).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        session.delete(itemToDelete)
+        session.commit()
+        return redirect('/catalog/%s/items/' % category.id)
+    else:
+        return render_template('itemToDelete.html', item=itemToDelete, category=category,login_session=login_session)
+
+# Routes for JSON endpoints
+
+# JSON endpoint to view all categories/sports in the catalog
+@app.route('/catalog/JSON')
+def categoriesJSON():
+    categories = session.query(Category).all()
+    return jsonify(Catalog=[r.serialize for r in categories])
+
+# JSON endpoint to view all items in a category
 @app.route('/catalog/<int:category_id>/JSON')
 @app.route('/catalog/<int:category_id>/items/JSON')
 def categoryMenuJSON(category_id):
@@ -193,18 +285,13 @@ def categoryMenuJSON(category_id):
     items = session.query(Item).filter_by(category_id=category_id).all()
     return jsonify(Items=[i.serialize for i in items])
 
+# JSON endpoint to view a particular item in a category/sport
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/JSON')
 def menuItemJSON(category_id, item_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    item = session.query(category).filter_by(id=item_id).one()
-    return jsonify(Item=Item.serialize)
-
-@app.route('/catalog/JSON')
-def categoriesJSON():
-    categories = session.query(Category).all()
-    return jsonify(Catalog=[r.serialize for r in categories])
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(Item=item.serialize)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=8000)
