@@ -1,5 +1,4 @@
-This tutorial is taken from Udacity's Full Stack Web Developer Nanodegree.
-
+This a project for Udacity's Full Stack Web Developer Nanodegree and tutorial is inspired from one of courses.
 # Prerequisites
 
 - VirtualBox, see [VirtualBox](#install-virtualbox) section
@@ -10,11 +9,11 @@ This tutorial is taken from Udacity's Full Stack Web Developer Nanodegree.
 
 - Clone the repository `git clone https://github.com/adityamehra/catalog.git` or download the repository.
 - Install the prerequisites
-- Move the repository to directry called vagrant, see VM configuration, [Download the VM configuration](#download-the-vm-configuration) section
-- Run the following command
-- `python database_setup`, to create sqlite database catalog with Category and Item tables
-- `python fill_catalog.py`, to fill the tables with some values
-- `python server.py`, to get the website up and running
+- Move the repository to the directry called __vagrant__, see [Download the VM configuration](#download-the-vm-configuration) section
+- Run the following command:
+ 1. `python database_setup`, to create sqlite database catalog with Category and Item tables
+ 2. `python fill_catalog.py`, to fill the tables with some values
+ 3. `python server.py`, to get the website up and running
 - Go to http://localhost:8000/
 
 ## Install VirtualBox
