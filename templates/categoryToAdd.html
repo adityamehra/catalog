@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catalog</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//apis.google.com/js/platform.js?onload=start"></script>
+</head>
+
+<body>
+ <nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+   <div class="navbar-header">
+     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+     </button>
+     <a class="navbar-brand" href="#">Logo</a>
+   </div>
+   <div class="collapse navbar-collapse" id="myNavbar">
+     <ul class="nav navbar-nav">
+       <li class="active"><a href="/">Home</a></li>
+       <li><a href="/products">Products</a></li>
+       <li><a href="#">Deals</a></li>
+       <li><a href="#">Stores</a></li>
+       <li><a href="#">Contact</a></li>
+     </ul>
+     <ul class="nav navbar-nav navbar-right">
+       <!-- <li><a href="/login"><span class="glyphicon glyphicon-user"></span> Login</a></li> -->
+       <li class="dropdown">
+         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span> {{login_session['username']}} <span class="caret"></span></a>
+         <ul class="dropdown-menu">
+           <li><a href="/gdisconnect">Sign out</a></li>
+           <li role="separator" class="divider"></li>
+           <li><a href="#">Another action</a></li>
+           <li><a href="#">Something else here</a></li>
+           <li><a href="#">One more separated link</a></li>
+         </ul>
+       </li>
+       <li><a href="#"><span class="glyphicon glyphicon-shopping-cart"></span> Cart</a></li>
+     </ul>
+   </div>
+  </div>
+ </nav>
+<main>
+ <div class="row banner menu">
+		<div class="col-md-11 col-md-offset-1 padding-none">
+			<h1>Add new Category</h1>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 col-md-offset-1 padding-top">
+			<form action="#" method = "post">
+				<div class="form-group">
+     <label for="name">Name:</label>
+					<input type ="text" class="form-control" name="name" placeholder="Name">
+    </div>
+
+    <button type="submit" class="btn btn-success" id="submit" type="submit">
+				 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+     Save
+    </button>
+
+    <a href = '{{url_for('showCatalog')}}'>
+					<button class="btn btn-primary delete">
+					<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+				</a>
+    </div>
+			</form>
+	</div>
+</main>
+</body>
+</html>

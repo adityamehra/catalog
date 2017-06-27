@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+  <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+</head>
+
+<body>
+<main>
+ <h1> Are you sure to want to delete {{category.name}}?</h1>
+ <form style="float:left;margin-right:10px;" action="#" method = 'post'>
+  <button type="submit" class="btn btn-danger delete" id="submit" type="submit">
+   <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    Delete
+   </button>
+ </form>
+ <a href = '{{url_for('showCatalog')}}'>
+ 	<button class="btn btn-primary">
+ 	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel</button>
+ </a>
+</main>
+
+</body>
+</html>

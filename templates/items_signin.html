@@ -6,29 +6,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../css/items.css">
+  <link rel="stylesheet" href="{{url_for('static', filename='styles/signedout.css')}}">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
   <script src="//apis.google.com/js/platform.js?onload=start"></script>
-  <style>
-  /* Remove the navbar's default rounded borders and increase the bottom margin */
-  .navbar {
-    margin-bottom: 50px;
-    border-radius: 0;
-  }
-
-  /* Remove the jumbotron's default bottom margin */
-  .jumbotron {
-    margin-bottom: 0;
-  }
-
-  /* Add a gray background color and some padding to the footer */
-  footer {
-    background-color: #f2f2f2;
-    padding: 25px;
-  }
-  </style>
 </head>
 
 <body>
@@ -71,6 +53,11 @@
 
 <main class="container">
   <div class="row">
+   <div class="col-sm-12">
+    <a href="/login" class="btn btn-info notloggedin">Add new item!</a>
+   </div>
+  </div>
+  <div class="row">
     {% for item in items %}
     <div class="col-sm-4">
       <div class="panel panel-info">
@@ -79,6 +66,8 @@
         <div class="panel-footer">
          <p>
            <a href="#" class="btn btn-info">{{item.price}}</a>
+           <a href="/login" class="btn btn-warning notloggedin">Edit</a>
+           <a href="/login" class="btn btn-danger notloggedin">Delete</a>
            <a href="#" class="btn btn-success">Add to cart</a>
          </p>
         </div>
