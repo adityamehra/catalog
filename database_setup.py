@@ -31,6 +31,7 @@ class Item(Base):
     price = Column(String(8))
     size = Column(String(8))
     category_id = Column(Integer, ForeignKey('category.id'))
+    # https://stackoverflow.com/questions/5033547/sqlalchemy-cascade-delete
     category = relationship(Category, backref=backref("Item", cascade="all, delete"))
 
     @property
