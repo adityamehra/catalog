@@ -163,13 +163,16 @@ def showCatalog():
 @app.route('/catalog/<int:category_id>/')
 @app.route('/catalog/<int:category_id>/items/')
 def showItems(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    items = session.query(Item).filter_by(
-        category_id=category_id).all()
-    if 'username' not in login_session:
-        return render_template('items_signin.html', items=items, category=category)
-    else:
-        return render_template('items_signout.html', items=items, category=category, login_session=login_session)
+    try:
+        category = session.query(Category).filter_by(id=category_id).one()
+        items = session.query(Item).filter_by(
+            category_id=category_id).all()
+        if 'username' not in login_session:
+            return render_template('items_signin.html', items=items, category=category)
+        else:
+            return render_template('items_signout.html', items=items, category=category, login_session=login_session)
+    except:
+        return "No category with id %s. Please try a valid category id." % category_id
 
 # CRUD operations for Category
 @app.route('/catalog/add_category/', methods=['GET', 'POST'])
@@ -273,16 +276,23 @@ def categoriesJSON():
 # JSON endpoint to view all items in a category
 @app.route('/catalog/<int:category_id>/JSON')
 @app.route('/catalog/<int:category_id>/items/JSON')
-def categoryMenuJSON(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    items = session.query(Item).filter_by(category_id=category_id).all()
-    return jsonify(Items=[i.serialize for i in items])
+def categoryItemsJSON(category_id):
+    try:
+        category = session.query(Category).filter_by(id=category_id).one()
+        items = session.query(Item).filter_by(category_id=category_id).all()
+        return jsonify(Items=[i.serialize for i in items])
+    except:
+        return "No category with id %s. Please try a valid category id." % category_id
 
 # JSON endpoint to view a particular item in a category/sport
 @app.route('/catalog/<int:category_id>/item/<int:item_id>/JSON')
-def menuItemJSON(category_id, item_id):
-    item = session.query(Item).filter_by(id=item_id).one()
-    return jsonify(Item=item.serialize)
+def itemJSON(category_id, item_id):
+    try:
+        item = session.query(Item).filter(Item.id == item_id, Item.category_id == category_id).one()
+        print item
+        return jsonify(Item=item.serialize)
+    except:
+        return "Please try a valid category id and item id combination."
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
